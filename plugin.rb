@@ -20,10 +20,6 @@ class Onebox::Engine::BilibiliOnebox
     return "aid=#{match[1]}" if match && match[1]
     match = uri.path.match(/\/video\/BV([a-zA-Z0-9]+)(\.html)?.*/)
     return "bvid=#{match[1]}" if match && match[1]
-
-    nil
-  rescue
-    return nil
   end
 
   def to_html
