@@ -1,21 +1,45 @@
 # frozen_string_literal: true
 
-# name: discourse-plugin-name
-# about: TODO
-# meta_topic_id: TODO
-# version: 0.0.1
-# authors: Discourse
-# url: TODO
+# name: discourse-onebox-bilibili
+# about: Add support for Bilibili video embeds in Discourse
+# version: 1.0.0
+# authors: TreeNewBee
+# url: https://github.com/TheTNB/discourse-onebox-bilibili
 # required_version: 2.7.0
 
-enabled_site_setting :plugin_name_enabled
+require "onebox"
 
-module ::MyPluginModule
-  PLUGIN_NAME = "discourse-plugin-name"
-end
+class Onebox::Engine::BilibiliOnebox
+  include Onebox::Engine
 
-require_relative "lib/my_plugin_module/engine"
+  matches_regexp(/^https?:\/\/(?:www\.)?bilibili\.com\/video\/([a-zA-Z0-9]+)\/?$/)
+  always_https
 
-after_initialize do
-  # Code which should run after Rails has finished booting
+  def video_id
+    match = uri.path.match(/\/video\/av(\d+)(\.html)?.*/)
+    return "aid=#{match[1]}" if match && match[1]
+    match = uri.path.match(/\/video\/BV([a-zA-Z0-9]+)(\.html)?.*/)
+    return "bvid=#{match[1]}" if match && match[1]
+
+    nil
+  rescue
+    return nil
+  end
+
+  def to_html
+    <<-HTML
+      <iframe
+        src='https://player.bilibili.com/player.html?#{video_id}&p=1'
+        frameborder="0"
+        framespacing="0"
+        width='100%'
+        style='aspect-ratio: 16/9;margin:auto;'
+        allowfullscreen>
+      </iframe>
+    HTML
+  end
+
+  def placeholder_html
+    to_html
+  end
 end

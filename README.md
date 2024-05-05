@@ -1,5 +1,5 @@
-# **Plugin Name** Plugin
+# Discourse Onebox Bilibili Plugin
 
 **Plugin Summary**
 
-For more information, please see: **url to meta topic**
+Add support for Bilibili video embeds in Discourse.
