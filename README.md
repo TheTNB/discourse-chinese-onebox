@@ -1,5 +1,5 @@
-# Discourse Onebox Bilibili Plugin
+# Discourse Chinese Onebox Plugin
 
 **Plugin Summary**
 
-Add support for Bilibili video embeds in Discourse.
+Add support for Chinese video sites embeds in Discourse.

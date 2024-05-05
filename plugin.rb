@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # name: discourse-chinese-onebox
-# about: Add support for Chinese video websites in Discourse
-# version: 1.0.0
+# about: Add support for Chinese video sites embeds in Discourse
+# version: 1.0.2
 # authors: TreeNewBee
 # url: https://github.com/TheTNB/discourse-chinese-onebox
 # required_version: 2.7.0
