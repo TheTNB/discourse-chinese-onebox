@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-# name: discourse-onebox-bilibili
-# about: Add support for Bilibili video embeds in Discourse
+# name: discourse-chinese-onebox
+# about: Add support for Chinese video websites in Discourse
 # version: 1.0.0
 # authors: TreeNewBee
-# url: https://github.com/TheTNB/discourse-onebox-bilibili
+# url: https://github.com/TheTNB/discourse-chinese-onebox
 # required_version: 2.7.0
 
 require "onebox"
@@ -16,10 +16,13 @@ class Onebox::Engine::BilibiliOnebox
   always_https
 
   def video_id
-    match = uri.path.match(/\/video\/av(\d+)(\.html)?.*/)
-    return "aid=#{match[1]}" if match && match[1]
-    match = uri.path.match(/\/video\/BV([a-zA-Z0-9]+)(\.html)?.*/)
-    return "bvid=#{match[1]}" if match && match[1]
+    return unless uri&.path
+
+    if (match = uri.path.match(/\/video\/av(\d+)(\.html)?.*/))
+      "aid=#{match[1]}"
+    elsif (match = uri.path.match(/\/video\/BV([a-zA-Z0-9]+)(\.html)?.*/))
+      "bvid=#{match[1]}"
+    end
   end
 
   def to_html
@@ -29,7 +32,69 @@ class Onebox::Engine::BilibiliOnebox
         frameborder="0"
         framespacing="0"
         width='100%'
-        style='aspect-ratio: 16/9;margin:auto;'
+        height='420'
+        allowfullscreen>
+      </iframe>
+    HTML
+  end
+
+  def placeholder_html
+    to_html
+  end
+end
+
+class Onebox::Engine::YoukuOnebox
+  include Onebox::Engine
+
+  matches_regexp(/^https?:\/\/(?:www\.)?youku\.com\/v_show\/id_([a-zA-Z0-9]+)\.html/)
+  always_https
+
+  def video_id
+    return unless uri&.path
+
+    match = uri.path.match(/\/v_show\/id_([a-zA-Z0-9]+)\.html/)
+    match[1] if match
+  end
+
+  def to_html
+    <<-HTML
+      <iframe
+        src='https://player.youku.com/embed/#{video_id}'
+        frameborder="0"
+        framespacing="0"
+        width='100%'
+        height='420'
+        allowfullscreen>
+      </iframe>
+    HTML
+  end
+
+  def placeholder_html
+    to_html
+  end
+end
+
+class Onebox::Engine::TencentVideoOnebox
+  include Onebox::Engine
+
+  matches_regexp(/^https?:\/\/v\.qq\.com\/x\/page\/([a-zA-Z0-9]+)\.html/)
+  always_https
+
+  def video_id
+    return unless uri&.path
+
+    match = uri.path.match(/\/x\/page\/([a-zA-Z0-9]+)\.html/)
+    match[1] if match
+  end
+
+  def to_html
+    <<-HTML
+      <iframe
+        src='https://v.qq.com/txp/iframe/player.html?vid=#{video_id}'
+        frameborder="0"
+        framespacing="0"
+        width='100%'
+        height='420'
         allowfullscreen>
       </iframe>
     HTML
