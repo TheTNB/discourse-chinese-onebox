@@ -12,7 +12,7 @@ require "onebox"
 class Onebox::Engine::BilibiliOnebox
   include Onebox::Engine
 
-  matches_regexp(/^https?:\/\/(?:www\.)?bilibili\.com\/video\/([a-zA-Z0-9]+)\/?$/)
+  matches_regexp(/^https?:\/\/(?:www\.)?bilibili\.com\/video\/([A-Za-z0-9]+)\/?$/)
   always_https
 
   def video_id
@@ -20,7 +20,7 @@ class Onebox::Engine::BilibiliOnebox
 
     if (match = uri.path.match(/\/video\/av(\d+)(\.html)?.*/))
       "aid=#{match[1]}"
-    elsif (match = uri.path.match(/\/video\/BV([a-zA-Z0-9]+)(\.html)?.*/))
+    elsif (match = uri.path.match(/\/video\/BV([A-Za-z0-9]+)(\.html)?.*/))
       "bvid=#{match[1]}"
     end
   end
@@ -46,13 +46,13 @@ end
 class Onebox::Engine::YoukuOnebox
   include Onebox::Engine
 
-  matches_regexp(/^https?:\/\/(?:www\.)?youku\.com\/v_show\/id_([a-zA-Z0-9]+)\.html/)
+  matches_regexp(/^https?:\/\/v\.youku\.com\/v_show\/id_([A-Za-z0-9=]+)\.html/)
   always_https
 
   def video_id
     return unless uri&.path
 
-    match = uri.path.match(/\/v_show\/id_([a-zA-Z0-9]+)\.html/)
+    match = uri.path.match(/\/v_show\/id_([A-Za-z0-9=]+)\.html/)
     match[1] if match
   end
 
@@ -77,13 +77,13 @@ end
 class Onebox::Engine::TencentVideoOnebox
   include Onebox::Engine
 
-  matches_regexp(/^https?:\/\/v\.qq\.com\/x\/page\/([a-zA-Z0-9]+)\.html/)
+  matches_regexp(/^https?:\/\/v\.qq\.com\/x\/page\/([A-Za-z0-9]+)\.html/)
   always_https
 
   def video_id
     return unless uri&.path
 
-    match = uri.path.match(/\/x\/page\/([a-zA-Z0-9]+)\.html/)
+    match = uri.path.match(/\/x\/page\/([A-Za-z0-9]+)\.html/)
     match[1] if match
   end
 
